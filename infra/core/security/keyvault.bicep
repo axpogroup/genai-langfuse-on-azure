@@ -10,6 +10,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   location: location
   tags: tags
   properties: {
+    enableRbacAuthorization: true
     tenantId: subscription().tenantId
     sku: { family: 'A', name: 'standard' }
     accessPolicies: !empty(principalId) ? [
