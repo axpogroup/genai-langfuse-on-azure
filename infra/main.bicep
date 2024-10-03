@@ -29,13 +29,13 @@ param authTenantId string = ''
 
 var databaseAdmin = 'dbadmin'
 var databaseName = 'langfuse'
-var resourceToken = toLower(uniqueString(subscription().id, name, location))
+var resourceToken = take(toLower(uniqueString(subscription().id, name, location)),5)
 
 var tags = { 'azd-env-name': name }
 var prefix = '${name}-${resourceToken}'
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: '${name}-resource-group'
+  name: 'rg-${name}'
   location: location
   tags: tags
 }
@@ -45,7 +45,7 @@ module keyVault './core/security/keyvault.bicep' = {
   name: 'keyvault'
   scope: resourceGroup
   params: {
-    name: '${replace(take(prefix, 17), '-', '')}-vault'
+    name: '${prefix}-kv'
     location: location
     tags: tags
   }
